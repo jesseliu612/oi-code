@@ -19,17 +19,15 @@ ll geti(){
     while(ch>='0' && ch<='9')ret=ret*10+ch-'0',ch=getchar();
     return ret*k;
 }
-const int maxn = 1000;
-const int maxm = 50000;
-int n,m,pnt=1,s,t;
+const int maxn = 1000000;
+const int maxm = 10000000;
+int n,m,r,dx,pnt=1,s,t;
 int st[maxn],pt[maxm],nxt[maxm],flow[maxm],cap[maxm],d[maxn],q[maxm],ent=1;
 void adde(int u,int v,int fl){
     pt[++ent]=v;nxt[ent]=st[u];st[u]=ent;flow[ent]=0;cap[ent]=fl;
     pt[++ent]=u;nxt[ent]=st[v];st[v]=ent;flow[ent]=0;cap[ent]=0;
 }
-struct node{
-    int u,v;
-}ns[maxn];
+int ns[60][60][60];
 bool bfs(){
     memset(d,-1,sizeof(d));
     int hd=0,tl=0;
@@ -67,25 +65,47 @@ int dinic(){
     return ret;
 }
 int main(){
-    n=geti();m=geti();
+    freopen("input.txt","r",stdin);
+    freopen("output.txt","w",stdout);
+
+    n=geti();m=geti();r=geti();dx=geti();
     for(int i=1;i<=n;i++){
-        ns[i].u=++pnt;ns[i].v=++pnt;
+        for(int j=1;j<=m;j++){
+            for(int k=1;k<=r+1;k++){
+                ns[i][j][k]=++pnt;
+            }
+        }
     }
     s=++pnt;t=++pnt;
-    int u,v;
-    for(int i=1;i<=n;i++){
-        u=geti();
-        adde(ns[i].v,t,u);
+    for(int k=1;k<=r;k++){
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=m;j++){
+                adde(ns[i][j][k],ns[i][j][k+1],geti());
+            }
+        }
     }
     for(int i=1;i<=n;i++){
-        u=geti();
-        adde(s,ns[i].u,u);
+        for(int j=1;j<=m;j++){
+            adde(s,ns[i][j][1],inf);
+        }
     }
-    for(int i=1;i<=m;i++){
-        u=geti();v=geti();
-        adde(ns[u].u,ns[v].v,inf);
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            adde(ns[i][j][r+1],t,inf);
+        }
+    }
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            for(int k=dx+1;k<=r+1;k++){
+                if(i<n)adde(ns[i][j][k],ns[i+1][j][k-dx],inf);
+                if(j<m)adde(ns[i][j][k],ns[i][j+1][k-dx],inf);
+                if(i>1)adde(ns[i][j][k],ns[i-1][j][k-dx],inf);
+                if(j>1)adde(ns[i][j][k],ns[i][j-1][k-dx],inf);
+            }
+        }
     }
     cout << dinic();
+    
     fclose(stdin);
     fclose(stdout);
     return 0;
