@@ -42,8 +42,6 @@ void sieve(){
 ll calc(ll x){
     ll mx=sqrt(x)+1;
     ll ret=0;
-    //printf("calc(%lld)\n",x);cout << flush;
-    //cout << mx << endl;
     for(int i=1;i<=mx;i++){
         ret+=(x/(i*i))*mu[i];
     }
@@ -60,13 +58,12 @@ int main(){
         ll l=1,r=(1ll<<31)-1,mid,rt=-1;
         while(l<=r){
             mid=(l+r)>>1;
-            //cout << "l = " << l << " , r = " << r << endl;
-            if(calc(mid)<=n){
+            if(calc(mid)>=n){
                 rt=mid;
-                l=mid+1;
+                r=mid-1;
             }
             else{
-                r=mid-1;
+                l=mid+1;
             }
         }
         printf("%lld\n",rt);
