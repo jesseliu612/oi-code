@@ -45,6 +45,7 @@ ll calc(ll x){
     for(int i=1;i<=mx;i++){
         ret+=(x/(i*i))*mu[i];
     }
+    printf("calc(%lld) = %lld\n",x,ret);
     return ret;
 }
 int main(){
